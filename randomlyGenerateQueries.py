@@ -28,11 +28,10 @@ import random
 number_of_max_params = 4
 list_of_columns = ['L_ORDERKEY','L_PARTKEY','L_SUPPKEY','L_LINENUMBER','L_SHIPDATE','L_DISCOUNT','L_TAX']
 
-
+# Randomly sample columns of table
 def getColumns():
     selectedColumn = random.sample(list_of_columns, number_of_max_params)
     return selectedColumn
-
 
 def sampleDistinctValues(colname, cur):
     cur.execute("SELECT DISTINCT "+colname+" from lineitem")
@@ -41,14 +40,18 @@ def sampleDistinctValues(colname, cur):
 
 
 try:
-
+    
+    # Connect to postgress local server
     conn = psycopg2.connect("dbname='postgres' user='postgres' host='localhost' password='admin'")
     cur = conn.cursor()
-
+    
+    # operator selection 
     operator = ['=','>','<']
 
+    # Randomly sample columns of table
     columns = getColumns()
-
+    
+    # Random Query Generator
     query = 'select count(*) from lineitem where '
     for column in columns:
         value = sampleDistinctValues(column, cur)
